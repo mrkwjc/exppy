@@ -1,0 +1,22 @@
+language: python
+python:
+- 3.7
+install:
+- python setup.py sdist
+- pip install dist/*
+script:
+- mkdir testing
+- cp test_exppy.py testing
+- cd testing
+- python test_expy.py
+- cd ..
+deploy:
+  provider: pypi
+  user: mwojc
+  password:
+    secure: howtogetsecure?
+  distributions: sdist
+  skip_cleanup: true
+  on:
+    tags: true
+    branch: master
