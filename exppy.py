@@ -477,50 +477,53 @@ def load_experiment(expname):
 
 
 if __name__ == "__main__":
-    spec = (('H_0',   (0.05,   0.5,       'log10', 5)),
-            ('E_0',   (20000., 50000000., 'log10', 5)),
-            ('v_0',   (0.05,   0.45,      'log10', 3)),
-            ('rho_0',  2.4),
-            ('eta_0', 'eta_1'),
-            ('H_1',   '10.-H_0'),
-            ('E_1',   (20000., 5000000.,  'log10', 5)),
-            ('v_1',   (0.05,   0.45,      'log10', 3)),
-            ('rho_1', 1.8),
-            ('eta_1', (20.,    100000.,   'log10', 5)))
-    lhs = LHSDesign(spec)
-    gsd = GSDDesign(spec)
-    rnd = RandomDesign(spec)
+    import pytest
+    pytest.main(['test_exppy.py', '-v'])
 
-    # Random single designs
-    dd = lhs.pick_random_design()
-    dr = gsd.pick_random_point()
-    i, d = lhs.pick_random_design(index=True)
+    #spec = (('H_0',   (0.05,   0.5,       'log10', 5)),
+            #('E_0',   (20000., 50000000., 'log10', 5)),
+            #('v_0',   (0.05,   0.45,      'log10', 3)),
+            #('rho_0',  2.4),
+            #('eta_0', 'eta_1'),
+            #('H_1',   '10.-H_0'),
+            #('E_1',   (20000., 5000000.,  'log10', 5)),
+            #('v_1',   (0.05,   0.45,      'log10', 3)),
+            #('rho_1', 1.8),
+            #('eta_1', (20.,    100000.,   'log10', 5)))
+    #lhs = LHSDesign(spec)
+    #gsd = GSDDesign(spec)
+    #rnd = RandomDesign(spec)
 
-    class MyDesign(LHSDesign):
-        spec = (('H_0',   (0.05,   0.5,       'log10', 5)),
-                ('E_0',   (20000., 50000000., 'log10', 5)),
-                ('v_0',   (0.05,   0.45,      'log10', 3)),
-                ('rho_0',  2.4),
-                ('eta_0', 'eta_1'),
-                ('H_1',   '10.-H_0'),
-                ('E_1',   (20000., 5000000.,  'log10', 5)),
-                ('v_1',   (0.05,   0.45,      'log10', 3)),
-                ('rho_1', 1.8),
-                ('eta_1', (20.,    100000.,   'log10', 5)))
-    lhs2 = MyDesign()
+    ## Random single designs
+    #dd = lhs.pick_random_design()
+    #dr = gsd.pick_random_point()
+    #i, d = lhs.pick_random_design(index=True)
 
-    # Test experiment
-    class MyModel(Model):
-        def solve(self, d):
-            return {'X': np.random.rand(1), 'Y': np.random.rand(5)}, 'hej'
+    #class MyDesign(LHSDesign):
+        #spec = (('H_0',   (0.05,   0.5,       'log10', 5)),
+                #('E_0',   (20000., 50000000., 'log10', 5)),
+                #('v_0',   (0.05,   0.45,      'log10', 3)),
+                #('rho_0',  2.4),
+                #('eta_0', 'eta_1'),
+                #('H_1',   '10.-H_0'),
+                #('E_1',   (20000., 5000000.,  'log10', 5)),
+                #('v_1',   (0.05,   0.45,      'log10', 3)),
+                #('rho_1', 1.8),
+                #('eta_1', (20.,    100000.,   'log10', 5)))
+    #lhs2 = MyDesign()
 
-    design = LHSDesign(spec, samples=10)
-    model = MyModel()
-    exp = Experiment(design, model)
-    exp.run()
-    # Test run experiment
-    run_experiments(exp.dirname) #, LHSDesign, MyModel)
-    run_experiments(exp.dirname+'aaaaaa', MyDesign, MyModel)
-    # Rester experiment from
-    run_experiments(exp.dirname, restart_from=5)
+    ## Test experiment
+    #class MyModel(Model):
+        #def solve(self, d):
+            #return {'X': np.random.rand(1), 'Y': np.random.rand(5)}, 'hej'
+
+    #design = LHSDesign(spec, samples=10)
+    #model = MyModel()
+    #exp = Experiment(design, model)
+    #exp.run()
+    ## Test run experiment
+    #run_experiments(exp.dirname) #, LHSDesign, MyModel)
+    #run_experiments(exp.dirname+'aaaaaa', MyDesign, MyModel)
+    ## Rester experiment from
+    #run_experiments(exp.dirname, restart_from=5)
     
