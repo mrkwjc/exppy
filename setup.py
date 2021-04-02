@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="exppy",
-    version="0.9.2",
+    version="0.1.0",
     author="Marek Wojciechowski",
     author_email="mrkwjc@gmail.com",
     description="Numerical experiments in python",
