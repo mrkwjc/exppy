@@ -1,42 +1,43 @@
 # exppy
-Numerical experiments in python
+This small package is intended for performing numerical experiments with continuous parameters. Currently parameters of the model can be randomized with uniform or log-uniform distributions in the given range. Simple random, latin hypercube or generalized subset designs can be used (supported by `pyDOE2` package).
 
-<!--# Reasoning
-Numpy's einsum is a fantastic function which allows for sophisticated array operations with a single, clear line of code. However, this function in general does not benefit from the underlaying multicore architecture and all operations are performed on a single CPU.
+Example:
 
-The idea is then to split the einsum input operands along the chosen subscript, perform computation in threads and then compose the final result by summation (if subscript is not present in output) or concatenation of partial results.
+```python
+from exppy import LHSDesign, Experiment
+from math import sin, cos
+import pylab
 
-# Usage
-This function can be used as a replacement for numpy's einsum:
 
-    from einsumt import einsumt as einsum
-    result = einsum(*operands, **kwargs)
+class MyDesign(LHSDesign):
+    spec = (('x', (0, 6.28, 'uniform', 10)),
+            ('y', (0, 6.28, 'uniform', 10)))
+    samples = 50
 
-In current implementation first operand *must* be a subscripts string. Other differences will be treated as unintended bugs.
 
-# Benchmarking
-In order to test, if `einsumt` would be beneficial in your particular case please run the benchmark, e.g.:
+class MyModel:
+    # model can be any class, but it is required to have 'solve' method
+    # which takes sample `d` as argument and returns dict of results `res`
+    def solve(self, d):
+        x, y = d.x, d.y
+        res = {'F': sin(x)*cos(y), 'G': x*y}
+        return res
 
-    import numpy as np
-    from einsumt import bench_einsumt
+# Evaluate experiments and dump everything to 'test' directory:
+ex = Experiment(MyDesign(), MyModel(), dirname='test')
+ex.run()  
 
-    bench_einsumt('aijk,bkl->ail',
-                  np.random.rand(100, 100, 10, 10),
-                  np.random.rand(50, 10, 50))
-and the result is:
+# Plot 'F'
+x = ex.design.x
+y = ex.design.y
+F = ex.result.F
+pylab.tricontour(x, y, F, levels=14, linewidths=0.5, colors='k')
+cntr = pylab.tricontourf(x, y, F, levels=14, cmap="RdBu_r")
+pylab.colorbar(cntr)
+pylab.plot(x, y, 'ko', ms=3)
+pylab.title('$\sin(x)\cos(y)$\n (%d LHS samples)' % ex.design.samples)
+```
 
-    Platform:           Linux
-    CPU type:           Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz
-    Subscripts:         aijk,bkl->ail
-    Shapes of operands: (100, 100, 10, 10), (50, 10, 50)
-    Leading index:      automatic
-    Pool type:          default
-    Number of threads:  12
-    Execution time:
-        np.einsum:      2755 ms  (average from 1 runs)
-        einsumt:        507.9 ms  (average from 5 runs)
-    Speed up:           5.424x
-More exemplary benchmark calls are contained in bench_einsum.py file.
+The resulting figure looks like this:
 
-# Disclaimer
-Before you start to blame me because of little or no speedups please keep in mind that threading costs additional time (because of splitting and joining data for example), so `einsumt` function would become beneficial for larger arrays only. Note also that in many cases numpy's einsum can be efficiently replaced with combination of optimized dots, tensordots, matmuls, transpositions and so on, instead of `einsumt` (at cost of code clarity of course).-->
+![image](data/sincos.png)
