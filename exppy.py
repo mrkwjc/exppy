@@ -10,18 +10,17 @@ import random
 import string
 import traceback
 import os
-import pickle as cPickle
+import pickle
 import shutil
 import sys
 import warnings
 import ast
 
 
-
 def is_valid_variable_name(name):
     if not isinstance(name, str):
         return False
-    if '.' in name:  # or name.startswith('__'):  # or name in banned_keys:
+    if '.' in name:
         return False
     try:
         ast.parse('{} = None'.format(name))
@@ -30,12 +29,75 @@ def is_valid_variable_name(name):
         return False
 
 
-class AttrDict(dict):
-    # Warning: what if e.g. 'keys' is set as a dictionary entry?
-    # then keys() stops working!
+class VarDict(collections.abc.MutableMapping):
     def __init__(self, *args, **kwargs):
-        super(AttrDict, self).__init__(*args, **kwargs)
-        self.__dict__ = self
+        self.update(*args, **kwargs)
+
+    def __setitem__(self, key, value):
+        if not self.is_valid_key(key):
+            raise KeyError("Key not allowed: '%s'" % key)
+        self.__dict__[key] = value
+
+    def __getitem__(self, key):
+        return self.__dict__[key]
+
+    def __delitem__(self, key):
+        del self.__dict__[key]
+
+    def __iter__(self):
+        return iter(self.__dict__)
+
+    def __len__(self):
+        return len(self.__dict__)
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def __repr__(self):
+        return 'VarDict({})'.format(self.__dict__)
+
+    def is_valid_key(self, key):
+        return is_valid_variable_name(key) and (key not in dir(dict))
+
+
+class IntDict(collections.abc.MutableMapping):
+    def __init__(self, N):
+        self.N = N
+        self.__dict = dict()
+
+    def __setitem__(self, key, value):
+        if not self.is_valid_key(key):
+            raise KeyError("Key must be an integer from 0 to %i" % self.N)
+        self.__dict[key] = value
+
+    def __getitem__(self, key):
+        return self.__dict[key]
+
+    def __delitem__(self, key):
+        del self.__dict[key]
+
+    def __iter__(self):
+        return iter(self.__dict)
+
+    def __len__(self):
+        return len(self.__dict)
+
+    def __str__(self):
+        return str(self.__dict)
+
+    #def __repr__(self):
+    #    return '{}, VarDict({})'.format(super().__repr__(), self.__dict__)
+
+    def is_valid_key(self, key):
+        return isinstance(key, int) and key < self.N
+    
+    def tolist(self):
+        return [self.get(i, None) for i in range(self.N)]
+
+    # def toarray(self):
+    #     lst = self.tolist()
+    #     nones = 
+
 
 
 def _get_by_name_or_idx(obj, key, maxkey):
@@ -43,8 +105,8 @@ def _get_by_name_or_idx(obj, key, maxkey):
         return obj.__dict__[key]
     elif isinstance(key, int):
         if abs(key) >= maxkey:
-                raise KeyError
-        d = AttrDict()
+            raise KeyError
+        d = VarDict()
         for k, v in obj.__dict__.items():
             if isinstance(v, np.ndarray):
                 d[k] = v[key]
@@ -71,8 +133,7 @@ def _savetxt(obj, dirname='.'):
                 warnings.simplefilter('default', np.VisibleDeprecationWarning)
                 varray_fmt = fmt[varray.dtype.char]
                 np.savetxt(name, varray, fmt=varray_fmt)
-            except (ValueError, IndexError, TypeError, KeyError,
-                    np.VisibleDeprecationWarning):
+            except (ValueError, IndexError, TypeError, KeyError):
                 with open(name, 'w') as f:
                     f.write(str(v))
 
@@ -293,7 +354,7 @@ class Result(object):
             v = np.asarray(v)
             if k not in d:
                 self._create_empty(k, v)
-            # hahdle variable size strings
+            # handle variable size strings
             if v.dtype.char == 'S' and d[k].itemsize < v.itemsize:
                 oldv = d[k]
                 self._create_empty(k, v)
@@ -315,7 +376,7 @@ class Model(object):
 class Experiment(object):
     status_codes = {-2: 'Exception in model',
                     -1: 'Not yet calculated',
-                    0: 'Sucessfull calculation'}
+                     0: 'Sucessfull calculation'}
 
     def __init__(self, design, model, dirname=None):
         self.design = design
@@ -377,7 +438,7 @@ class Experiment(object):
             r['message'] = traceback.format_exc()
         if 'status' not in r:
             r['status'] = 0
-        return AttrDict(r)
+        return VarDict(r)
 
     def run(self):
         self.report('\n\nRunning experiments from %i to %i\n'
@@ -398,7 +459,7 @@ class Experiment(object):
             if message != '':
                 self.report(message)
         self.finished = True
-        
+
         self.dump(backup=True)  # just to record finished value
         self.totxt()
 
@@ -409,7 +470,7 @@ class Experiment(object):
             shutil.copy2(fname, fname+'.bak')
         # Then dump
         with open(fname, 'wb') as f:
-            cPickle.dump(self, f, -1)
+            pickle.dump(self, f, -1)
         # And remove backup
         if backup and os.path.isfile(fname+'.bak'):
             os.remove(fname+'.bak')
@@ -440,15 +501,11 @@ class Experiment(object):
             f.write(str(self.finished))
 
 
-# def search_experiments(dirname):
-#    for dirpath, dirnames, filenames in os.walk():
-
-
 def run_experiments(dirname, dcls=None, mcls=None, restart_from=None):
     expname = '%s/%s.exp' % (dirname, dirname)
 
     if os.path.isfile(expname):
-        exp = cPickle.load(open(expname, 'rb'))
+        exp = pickle.load(open(expname, 'rb'))
         if restart_from is not None:
             exp.finished = False  # to be sure
             exp.current_design = restart_from-1
@@ -472,58 +529,10 @@ def load_experiment(expname):
     dirname = os.path.dirname(os.path.abspath(expname))
     sys.path.append(dirname+'/..')  # BUG: exp should be saved in main dir
     with open(expname, 'rb') as f:
-        exp = cPickle.load(f)
+        exp = pickle.load(f)
     return exp
 
 
 if __name__ == "__main__":
     import pytest
     pytest.main(['test_exppy.py', '-v'])
-
-    #spec = (('H_0',   (0.05,   0.5,       'log10', 5)),
-            #('E_0',   (20000., 50000000., 'log10', 5)),
-            #('v_0',   (0.05,   0.45,      'log10', 3)),
-            #('rho_0',  2.4),
-            #('eta_0', 'eta_1'),
-            #('H_1',   '10.-H_0'),
-            #('E_1',   (20000., 5000000.,  'log10', 5)),
-            #('v_1',   (0.05,   0.45,      'log10', 3)),
-            #('rho_1', 1.8),
-            #('eta_1', (20.,    100000.,   'log10', 5)))
-    #lhs = LHSDesign(spec)
-    #gsd = GSDDesign(spec)
-    #rnd = RandomDesign(spec)
-
-    ## Random single designs
-    #dd = lhs.pick_random_design()
-    #dr = gsd.pick_random_point()
-    #i, d = lhs.pick_random_design(index=True)
-
-    #class MyDesign(LHSDesign):
-        #spec = (('H_0',   (0.05,   0.5,       'log10', 5)),
-                #('E_0',   (20000., 50000000., 'log10', 5)),
-                #('v_0',   (0.05,   0.45,      'log10', 3)),
-                #('rho_0',  2.4),
-                #('eta_0', 'eta_1'),
-                #('H_1',   '10.-H_0'),
-                #('E_1',   (20000., 5000000.,  'log10', 5)),
-                #('v_1',   (0.05,   0.45,      'log10', 3)),
-                #('rho_1', 1.8),
-                #('eta_1', (20.,    100000.,   'log10', 5)))
-    #lhs2 = MyDesign()
-
-    ## Test experiment
-    #class MyModel(Model):
-        #def solve(self, d):
-            #return {'X': np.random.rand(1), 'Y': np.random.rand(5)}, 'hej'
-
-    #design = LHSDesign(spec, samples=10)
-    #model = MyModel()
-    #exp = Experiment(design, model)
-    #exp.run()
-    ## Test run experiment
-    #run_experiments(exp.dirname) #, LHSDesign, MyModel)
-    #run_experiments(exp.dirname+'aaaaaa', MyDesign, MyModel)
-    ## Rester experiment from
-    #run_experiments(exp.dirname, restart_from=5)
-    

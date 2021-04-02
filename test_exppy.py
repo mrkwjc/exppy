@@ -2,129 +2,102 @@
 # -*- coding: utf-8 -*-
 import pytest
 import numpy as np
-from exppy import Design 
+from exppy import (RandomDesign,
+                   LHSDesign,
+                   GSDDesign,
+                   Experiment,
+                   run_experiments)
+
+
+# spec = (('H_0',   (0.05,   0.5,       'log10', 5)),
+#         ('E_0',   (20000., 50000000., 'log10', 5)),
+#         ('v_0',   (0.05,   0.45,      'log10', 3)),
+#         ('rho_0',  2.4),
+#         ('eta_0', 'eta_1'),
+#         ('H_1',   '10.-H_0'),
+#         ('E_1',   (20000., 5000000.,  'log10', 5)),
+#         ('v_1',   (0.05,   0.45,      'log10', 3)),
+#         ('rho_1', 1.8),
+#         ('eta_1', (20.,    100000.,   'log10', 5)))
+
+
+spec = (('A',   (1, 10, 'log10',   5)),
+        ('B',   (2, 4,  'uniform', 10)),
+        ('C',   2.1),
+        ('D',   'A+G_1**2'),
+        ('E',   (1, 10, 'log2', 5)),
+        ('F',   (1, 10, 'log',  5)),
+        ('G_1', (1, 100, 'uniform',  5)),
+        ('G_2', (1, 100, 'uniform',  5)),
+        ('G_3', (1, 100, 'uniform',  5)))
+
+
+# Define dummy design
+class MyDesign(LHSDesign):
+    spec = spec
+    samples = 20
+
+
+# Define dummy model
+class MyModel:
+    def solve(self, d):
+        G = d.G
+        G_1 = d.G_1
+        return {'X': np.random.rand(1), 'Y': G[2]}
 
 
 class TestDesign(object):
-    def test_design(self):
-        pass
-    #def test_summation_reduction(self):
-        #a = np.random.rand(100, 10, 10)
-        #b = np.random.rand(10, 10)
-        #subs = 'aij,ji->ij'
-        #assert np.allclose(np.einsum(subs, a, b), einsumt(subs, a, b, idx='a'))
+    spec = spec
 
-    #def test_concatenation_reduction(self):
-        #a = np.random.rand(100, 10, 10)
-        #b = np.random.rand(10, 10)
-        #subs = 'aij,ji->aij'
-        #assert np.allclose(np.einsum(subs, a, b), einsumt(subs, a, b, idx='a'))
+    def test_random_design(self):
+        doe = RandomDesign(self.spec, samples=0.3)
+        doe = RandomDesign(self.spec, samples=20)
+        d = doe.pick_random_design()
+        i, d = doe.pick_random_design(index=True)
+        p = doe.pick_random_point()
 
-    #def test_custom_index(self):
-        #a = np.random.rand(100, 10, 10)
-        #b = np.random.rand(10, 10)
-        #subs = 'aij,ji->ij'
-        #res0 = np.einsum(subs, a, b)
-        #res1 = einsumt(subs, a, b, idx='a')
-        #res2 = einsumt(subs, a, b, idx='i')
-        #res3 = einsumt(subs, a, b, idx='j')
-        #assert np.allclose(res0, res1)
-        #assert np.allclose(res0, res2)
-        #assert np.allclose(res0, res3)
+    def test_lhs_design(self):
+        doe = LHSDesign(self.spec, samples=0.3)
+        doe = LHSDesign(self.spec, samples=20)
+        d = doe.pick_random_design()
+        i, d = doe.pick_random_design(index=True)
+        p = doe.pick_random_point()
 
-    #def test_automatic_index1(self):
-        #a = np.random.rand(100, 10, 10)
-        #b = np.random.rand(10, 10)
-        #subs = 'aij,ji->ij'
-        #res0 = np.einsum(subs, a, b)
-        #res1 = einsumt(subs, a, b)
-        #assert np.allclose(res0, res1)
+    def test_gsd_design(self):
+        doe = GSDDesign(self.spec, samples=0.3)
+        doe = GSDDesign(self.spec, samples=20)
+        d = doe.pick_random_design()
+        i, d = doe.pick_random_design(index=True)
+        p = doe.pick_random_point()
 
-    #def test_automatic_index2(self):
-        #a = np.random.rand(10, 10, 100)
-        #b = np.random.rand(10, 10)
-        #subs = 'ija,ji->ij'
-        #res0 = np.einsum(subs, a, b)
-        #res1 = einsumt(subs, a, b)
-        #assert np.allclose(res0, res1)
+    def test_class_spec_and_options(self):
+        class MyDesign(LHSDesign):
+            spec = self.spec
+            samples = 20
+        doe = MyDesign()
 
-    #def test_ellipsis1(self):
-        #a = np.random.rand(10, 10, 100)
-        #b = np.random.rand(10, 10)
-        #subs = 'ij...,ji->...ij'
-        #res0 = np.einsum(subs, a, b)
-        #res1 = einsumt(subs, a, b)
-        #assert np.allclose(res0, res1)
-
-    #def test_ellipsis2(self):
-        #a = np.random.rand(10, 10, 100)
-        #b = np.random.rand(10, 10)
-        #subs = 'ij...,ji->...ij'
-        #res0 = np.einsum(subs, a, b)
-        #res1 = einsumt(subs, a, b, idx='j')
-        #assert np.allclose(res0, res1)
-
-    #def test_small_array(self):
-        #from multiprocessing import cpu_count
-        #n = cpu_count() - 1
-        #if n > 0:
-            #a = np.random.rand(n, 10, 10)
-            #b = np.random.rand(10, 10)
-            #subs = 'aij,ji->ij'
-            #res0 = np.einsum(subs, a, b)
-            #res1 = einsumt(subs, a, b, idx='a')
-            #assert np.allclose(res0, res1)
-        #else:
-            #pytest.skip("not enough CPUs for this test")
-
-    #def test_custom_pool(self):
-        #from multiprocessing.pool import ThreadPool
-        #a = np.random.rand(100, 10, 10)
-        #b = np.random.rand(10, 10)
-        #subs = 'aij,ji->ij'
-        #res0 = np.einsum(subs, a, b)
-        #res1 = einsumt(subs, a, b, pool=ThreadPool())
-        #res2 = einsumt(subs, a, b, pool=5)
-        #assert np.allclose(res0, res1)
-        #assert np.allclose(res0, res2)
-
-    #def test_muti_operand(self):
-        #e = np.random.rand(50, 10)
-        #f = np.random.rand(50, 10, 10)
-        #g = np.random.rand(50, 10, 20)
-        #h = np.random.rand(20, 20, 10)
-        #subs = '...k,...km,...kp,plo->...lom'
-        #path = np.einsum_path(subs, e, f, g, h)
-        #res0 = np.einsum(subs, e, f, g, h, optimize=path[0])
-        #res1 = einsumt(subs, e, f, g, h, optimize=path[0])
-        #assert np.allclose(res0, res1)
-
-    #def test_implicit1(self):
-        #a = np.random.rand(10, 10)
-        #b = np.random.rand(10, 10)
-        #subs = 'ij,jk'
-        #assert np.allclose(np.einsum(subs, a, b), einsumt(subs, a, b))
-
-    #def test_implicit2(self):
-        #a = np.random.rand(10, 10)
-        #b = np.random.rand(10, 10)
-        #subs = 'ij,ji'
-        #assert np.allclose(np.einsum(subs, a, b), einsumt(subs, a, b))
-
-    #def test_implicit3(self):
-        #a = np.random.rand(10, 100, 10)
-        #subs = 'i...i'
-        #assert np.allclose(np.einsum(subs, a), einsumt(subs, a))
-    
-    #def test_many_indices(self):
-        #A = np.random.rand(100, 3, 3, 3, 3, 3)
-        #u = np.random.rand(100, 3, 6, 3, 3, 3)
-        #v = np.random.rand(100, 3, 6, 3, 3, 3)
-        #A1 = einsumt('egmipq, egpqrs -> egmirs', u, A)
-        #k1 = einsumt('egmirs, egnjrs -> eminj', A1, v)
-        #A2 = np.einsum('egmipq, egpqrs -> egmirs', u, A)
-        #k2 = np.einsum('egmirs, egnjrs -> eminj', A2, v)
-        #assert np.allclose(k1, k2)
+    def test_experiment(self):
+        design = MyDesign()
+        model = MyModel()
+        exp = Experiment(design, model)
+        exp.run()
+        X = exp.result.X
+        assert isinstance(X, np.ndarray)
+        # Below functionality should be in exp.run()
+        # Test run previous experiment
+        run_experiments(exp.dirname)  # Nothing shoud be done
+        aaae = np.testing.assert_array_almost_equal
+        aaae(X, np.loadtxt(exp.dirname+'/X.txt')[:, None])
+        # Restart experiment
+        run_experiments(exp.dirname, restart_from=5)
+        aaae(X[:5], np.loadtxt(exp.dirname+'/X.txt')[:5, None])
+        assert abs(X[6] - np.loadtxt(exp.dirname+'/X.txt')[6, None]) > 1e-8
+        # run in new folder
+        run_experiments(exp.dirname+'2', MyDesign, MyModel)
+        # Clean
+        import shutil
+        shutil.rmtree(exp.dirname, ignore_errors=True)
+        shutil.rmtree(exp.dirname + '2', ignore_errors=True)
 
 
 if __name__ == '__main__':
