@@ -41,3 +41,5 @@ pylab.title('$\sin(x)\cos(y)$\n (%d LHS samples)' % ex.design.samples)
 The resulting figure looks like this:
 
 ![image](data/sincos.png)
+
+For more hints look into the `test_exppy.py` file. Docs are in plans...
