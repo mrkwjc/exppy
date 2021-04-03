@@ -8,7 +8,7 @@ script:
 - mkdir testing
 - cp test_exppy.py testing
 - cd testing
-- python test_expy.py
+- python test_exppy.py
 - cd ..
 deploy:
   provider: pypi
