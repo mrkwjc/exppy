@@ -340,6 +340,25 @@ class GSDDesign(Design):
         self._create_design(doe)
 
 
+class FullFactDesign(Design):
+    name = 'FullFact'
+
+    def doe(self, **kwargs):
+        from pyDOE2 import fullfact
+        doeidx = fullfact(self.dnums).astype(int)
+        doe = np.empty(doeidx.shape)
+        for i in range(self.ndvars):
+            b0, b1 = self.dbounds[i]
+            fstr = self.dscale[i]
+            b0 = self._scale(b0, fstr)
+            b1 = self._scale(b1, fstr)
+            n = self.dnums[i]
+            dvals = np.linspace(b0, b1, n)
+            idx = doeidx.T[i]
+            doe.T[i] = self._rescale(dvals[idx], fstr)
+        self._create_design(doe)
+
+
 class Result(object):
     def __init__(self, N):
         self._N = N

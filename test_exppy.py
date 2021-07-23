@@ -5,6 +5,7 @@ import numpy as np
 from exppy import (RandomDesign,
                    LHSDesign,
                    GSDDesign,
+                   FullFactDesign,
                    Experiment,
                    run_experiments)
 
@@ -64,8 +65,15 @@ class TestDesign(object):
         p = doe.pick_random_point()
 
     def test_gsd_design(self):
-        doe = GSDDesign(self.spec, samples=0.3)
-        doe = GSDDesign(self.spec, samples=20)
+        doe = GSDDesign(self.spec, reduction=2)
+        doe = GSDDesign(self.spec, samples=3)
+        d = doe.pick_random_design()
+        i, d = doe.pick_random_design(index=True)
+        p = doe.pick_random_point()
+
+    def test_ff_design(self):
+        doe = FullFactDesign(self.spec)
+        assert doe.ndesign == np.prod(doe.dnums)
         d = doe.pick_random_design()
         i, d = doe.pick_random_design(index=True)
         p = doe.pick_random_point()
