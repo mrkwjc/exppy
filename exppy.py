@@ -113,6 +113,7 @@ def _get_by_name_or_idx(obj, key, maxkey):
             else:
                 d[k] = v
         d['_key'] = key
+        d['_keystr'] = str(key).zfill(len(str(maxkey)))
         return d
     else:
         raise KeyError
@@ -445,6 +446,7 @@ class Experiment(object):
 
     def runi(self, i, allres=False):
         d = self.design.get(i)
+        d['_dirname'] = self.dirname
         m = self.model
         r = {}
         try:

@@ -44,6 +44,7 @@ class MyModel:
     def solve(self, d):
         G = d.G
         G_1 = d.G_1
+        d._dirname  # should exist
         return {'X': np.random.rand(1), 'Y': G[2]}
 
 
@@ -106,6 +107,14 @@ class TestDesign(object):
         import shutil
         shutil.rmtree(exp.dirname, ignore_errors=True)
         shutil.rmtree(exp.dirname + '2', ignore_errors=True)
+
+    def test__key(self):
+        design = MyDesign()
+        # model = MyModel()
+        # exp = Experiment(design, model)
+        s = design.get(1)
+        assert s._key == 1
+        assert s._keystr == '01'
 
 
 if __name__ == '__main__':
