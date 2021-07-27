@@ -112,6 +112,7 @@ def _get_by_name_or_idx(obj, key, maxkey):
                 d[k] = v[key]
             else:
                 d[k] = v
+        d['_key'] = key
         return d
     else:
         raise KeyError
