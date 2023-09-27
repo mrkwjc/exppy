@@ -1,5 +1,5 @@
-# exppy
-This module is intended for performing numerical experiments with continuous parameters. Currently parameters of the model can be randomized with uniform or log-uniform distributions in the given range. Simple random, latin hypercube or generalized subset designs can be used (supported by `pyDOE2` package).
+# exppy - module that automates numerical experiments
+This module is intended for performing numerical experiments with continuous parameters. Currently, parameters of the model can be randomized with uniform or log-uniform distributions in the given range. Simple random, latin hypercube or generalized subset designs can be used (supported by `pyDOE2` package).
 
 Example:
 
