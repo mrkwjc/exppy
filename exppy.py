@@ -485,6 +485,39 @@ class Experiment(object):
         self.dump(backup=True)  # just to record finished value
         self.totxt()
 
+    def runmpi(self, i, allres=False):
+        r = self.runi(i)
+        print('Finished experiment *%i* with status: %i' % (i, r['status']),
+              flush=True)
+        return r
+
+    def runmp(self, workers=None):
+        self.report('\n\nRunning experiments from %i to %i\n'
+                    % (self.current_design, self.N))
+        print('Running experiments from %i to %i.'
+              % (self.current_design, self.N))
+        import multiprocessing as mp
+        workers = mp.cpu_count() if workers is None else workers
+        pool = mp.Pool(workers)
+        runs = [pool.apply_async(self.runmpi, (i,)) for i in range(self.N)]
+        pool.close()
+        pool.join()
+        for i, ar in enumerate(runs):
+            self.report('\nStarted experiment *%i*:\n' % i)
+            r = ar.get()
+            status = r.pop('status')
+            message = r.pop('message') if 'message' in r else ''
+            if status >= 0:  # assign results
+                self.result.set(i, r)
+            self.status[i] = status  # update status
+            self.report('Finished experiment *%i* with status: \n' % i)
+            self.report('% -4i: %s\n' % (status, self.status_codes[status]))
+            if message != '':
+                self.report(message)
+        self.finished = True
+        self.dump()
+        self.totxt()
+
     def dump(self, fname=None, backup=True):
         fname = self.dfname if fname is None else fname
         # First create backup
