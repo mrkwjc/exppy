@@ -1,0 +1,406 @@
+
+
+Running experiments from 0 to 50
+
+Experiment *0*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *1*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *2*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *3*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *4*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *5*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *6*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *7*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *8*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *9*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *10*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *11*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *12*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *13*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *14*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *15*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *16*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *17*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *18*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *19*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *20*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *21*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *22*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *23*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *24*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *25*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *26*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *27*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *28*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *29*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *30*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *31*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *32*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *33*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *34*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *35*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *36*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *37*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *38*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *39*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *40*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *41*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *42*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *43*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *44*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *45*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *46*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *47*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *48*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *49*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+
+Running experiments from 0 to 50
+
+Experiment *0*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *1*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *2*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *3*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *4*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *5*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *6*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *7*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *8*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *9*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *10*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *11*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *12*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *13*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *14*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *15*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *16*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *17*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *18*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *19*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *20*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *21*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *22*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *23*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *24*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *25*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *26*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *27*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *28*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *29*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *30*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *31*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *32*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *33*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *34*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *35*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *36*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *37*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *38*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *39*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *40*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *41*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *42*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *43*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *44*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *45*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *46*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *47*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *48*:
+Finished with status: 
+ 0  : Sucessfull calculation
+
+Experiment *49*:
+Finished with status: 
+ 0  : Sucessfull calculation

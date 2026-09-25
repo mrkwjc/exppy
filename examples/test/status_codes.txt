@@ -1,0 +1,3 @@
+-2  : Exception in model
+-1  : Not yet calculated
+ 0  : Sucessfull calculation

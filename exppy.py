@@ -130,9 +130,9 @@ def _savetxt(obj, dirname='.'):
         if not k.startswith('_'):
             name = dirname + '/' + str(k) + '.txt'
             try:
-                warnings.simplefilter('ignore', np.VisibleDeprecationWarning)
+                # warnings.simplefilter('ignore', np.VisibleDeprecationWarning)
                 varray = np.asarray(v)
-                warnings.simplefilter('default', np.VisibleDeprecationWarning)
+                # warnings.simplefilter('default', np.VisibleDeprecationWarning)
                 varray_fmt = fmt[varray.dtype.char]
                 np.savetxt(name, varray, fmt=varray_fmt)
             except (ValueError, IndexError, TypeError, KeyError):
@@ -148,6 +148,7 @@ def _random_string(length):
 class Design(object):
     name = None
     spec = None
+    constraints = None
 
     def __init__(self, spec=None, **kwargs):
         """
@@ -221,6 +222,9 @@ class Design(object):
             kvars[cname][:] = eval(cexpr, kvars)
             cidx = self.cidx[i]
             design.T[cidx] = kvars[cname]
+        if self.constraints is not None:
+            idx = eval(self.constraints, kvars)
+            design = design[idx]
         return design
 
     def _combine_vars(self):
